@@ -22,7 +22,10 @@ def check_files(local_path, remote_path, connection):
         sys.exit(1)
 
 
-def upload_file_to_blt(local_path=None, remote_path="~", username=None, force=False):
+def upload_file_to_blt(local_path=None,
+                       remote_path="~",
+                       username=None,
+                       force=False):
     print(f"Uploading {local_path} to BLT at location {remote_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
@@ -48,7 +51,10 @@ def upload_file_to_blt(local_path=None, remote_path="~", username=None, force=Fa
         conn.put(local_path, remote_path)
 
 
-def download_file_from_blt(local_path=".", remote_path=None, username=None,  force=False):
+def download_file_from_blt(local_path=".",
+                           remote_path=None,
+                           username=None,
+                           force=False):
     print(f"Downloading {remote_path} to BLT at location {local_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
