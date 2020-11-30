@@ -46,5 +46,7 @@ def run_console_cmd(command, endpoint_name="blt_small", wait=True):
         return run_function_async(funcx_command_fn, [cmd],
                                   endpoint_name=endpoint_name)
 
+
 def install_python_package(package_name):
-    return run_console_cmd(f"sudo /local/cluster/bin/pip3 install {package_name}")
+    return run_console_cmd(
+        f"sudo /local/cluster/bin/pip3 install {package_name}")
