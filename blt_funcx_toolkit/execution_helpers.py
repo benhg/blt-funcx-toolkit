@@ -1,7 +1,10 @@
 from config import blt_endpoints
 
 
-def run_function_wait_result(py_fn, py_fn_args, py_fn_kwargs={}, endpoint_name="blt_small"):
+def run_function_wait_result(py_fn,
+                             py_fn_args,
+                             py_fn_kwargs={},
+                             endpoint_name="blt_small"):
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
                   **py_fn_kwargs,
@@ -42,3 +45,6 @@ def run_console_cmd(command, endpoint_name="blt_small", wait=True):
     else:
         return run_function_async(funcx_command_fn, [cmd],
                                   endpoint_name=endpoint_name)
+
+def install_python_package(package_name):
+    return run_console_cmd(f"sudo /local/cluster/bin/pip3 install {package_name}")
