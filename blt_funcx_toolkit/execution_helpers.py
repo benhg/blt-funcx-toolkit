@@ -1,9 +1,10 @@
 from config import blt_endpoints
 
 
-def run_function_wait_result(py_fn, py_fn_args, endpoint_name="blt_small"):
+def run_function_wait_result(py_fn, py_fn_args, py_fn_kwargs={}, endpoint_name="blt_small"):
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
+                  **py_fn_kwargs,
                   endpoint_id=blt_endpoints[endpoint_name].uuid,
                   function_id=func_uuid)
     while True:
