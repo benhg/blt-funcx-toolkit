@@ -70,18 +70,21 @@ def fxsh(endpoint_name="blt_small"):
     try:
         cmd = input(ps1)
         while cmd.lower() != "exit":
-            
-                if cmd.startswith("cd "):
-                    cwd = cmd.split("cd ")[1].strip()
-                    cmd = input(ps1)
-                    continue
 
-                print(run_console_cmd(f"cd {cwd} ; {cmd}", endpoint_name=endpoint_name))
+            if cmd.startswith("cd "):
+                cwd = cmd.split("cd ")[1].strip()
                 cmd = input(ps1)
+                continue
+
+            print(
+                run_console_cmd(f"cd {cwd} ; {cmd}",
+                                endpoint_name=endpoint_name))
+            cmd = input(ps1)
     except KeyboardInterrupt:
         # Make ctrl-c look like an `exit`
         print(ps1 + "exit")
         break
+
 
 if __name__ == '__main__':
     fxsh()
