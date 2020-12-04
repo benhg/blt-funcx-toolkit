@@ -23,6 +23,12 @@ parser.add_argument("endpoint_name",
                     help="Endpoint to open interactive session on",
                     default="blt_small",
                     choices=blt_endpoints.keys())
+parser.add_argument("verbose",
+                    "v",
+                    action="store_true",
+                    help="Enable verbose output",
+                    default=False)
+args = parser.parse_args()
 args = parser.parse_args()
 
-fxsh(endpoint=args.endpoint_id)
+fxsh(endpoint=args.endpoint_id, print_wait=args.verbose)

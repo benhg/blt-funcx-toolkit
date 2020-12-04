@@ -12,8 +12,14 @@ def run_function_wait_result(py_fn,
                              endpoint_name="blt_small",
                              print_status=True):
     """
-    Run a function with funcx, wait for execution,
+    Register and run a function with FuncX, wait for execution,
         and return results when they are available
+
+    :param py_fn: Handle of Python function
+    :param py_fn_args: List of positional args for py function
+    :param py_fn_kwargs: Dict of keyword args for py function,
+    :param endpoint_name: Name of endpoint to run command on
+        - must be configured in config.py
     """
     fxc = FuncXClient()
     func_uuid = fxc.register_function(py_fn)
@@ -35,36 +41,81 @@ def run_function_wait_result(py_fn,
                 raise e
 
 
-def run_function_async(py_fn, py_fn_args, endpoint_name="blt_small"):
+def run_function_async(py_fn, py_fn_args, py_fn_kwargs={}, endpoint_name="blt_small"):
+    """
+    Asynchronously register and run a Python function on a FuncX endpoint
+
+    :param py_fn: Handle of Python function
+    :param py_fn_args: List of positional args for py function
+    :param py_fn_kwargs: Dict of keyword args for py function,
+    :param endpoint_name: Name of endpoint to run command on
+        - must be configured in config.py
+    """
     # Use return value for Funcx polling
     fxc = FuncXClient()
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
+                  **kwargs,
                   endpoint_id=blt_endpoints[endpoint_name].uuid,
                   function_id=func_uuid)
     return res
 
 
-def funcx_command_fn(cmd):
+def _funcx_command_fn(cmd):
+    """
+    Helper method for calling console command
+    """
     import subprocess
     return subprocess.check_output(cmd, shell=True)
 
 
 def run_console_cmd(command, endpoint_name="blt_small", wait=True):
+    """
+    Run a console command on the FuncX endpoint specified.
+
+    Either waits for output and returns output or
+        returns FuncX object which can be used to poll for results
+
+    :param command: command to run
+    :param endpoint_name: Name of endpoint to run command on
+        - must be configured in config.py
+    :param wait: Wait for output if True, otherwise run async.
+    """
     if wait:
-        return run_function_wait_result(funcx_command_fn, [command],
+        return run_function_wait_result(_funcx_command_fn, [command],
                                         endpoint_name=endpoint_name)
     else:
-        return run_function_async(funcx_command_fn, [command],
+        return run_function_async(_funcx_command_fn, [command],
                                   endpoint_name=endpoint_name)
 
 
 def install_python_package(package_name):
+    """
+    Helper function to install a python package with `pip3`
+
+    BLT Specific.
+
+    :param package_name: Package to install.
+    """
     return run_console_cmd(
         f"sudo /local/cluster/bin/pip3 install {package_name}")
 
 
-def fxsh(endpoint_name="blt_small"):
+def fxsh(endpoint_name="blt_small", print_wait=True):
+    """
+    FuncX Shell - `fxsh`
+
+    Use FuncX to open a virtual
+        interactive session on a FuncX endpoint.
+
+    Any commands input will be forwarded to the
+        endpoint using `subprocess.check_output`
+
+    Has only been tested with Linux-based endponits
+
+    :param endpoint_name: Endpoint name. Must be present in config file
+    :param print_wait: Print "waiting for results.." periodically while waiting.
+    """
     ps1 = f"fxsh[{endpoint_name}]$ "
     cwd = "~"
     try:
@@ -78,7 +129,8 @@ def fxsh(endpoint_name="blt_small"):
 
             print(
                 run_console_cmd(f"cd {cwd} ; {cmd}",
-                                endpoint_name=endpoint_name))
+                                endpoint_name=endpoint_name,
+                                print_wait=print_status))
             cmd = input(ps1)
     except KeyboardInterrupt:
         # Make ctrl-c look like an `exit`
