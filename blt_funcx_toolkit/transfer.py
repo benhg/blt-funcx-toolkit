@@ -6,6 +6,7 @@ import pysftp
 
 from blt_funcx_toolkit.config import *
 
+
 def setup_ftp_conn(username=None, privkey=None):
     """
     Open FTP connection to BLT
