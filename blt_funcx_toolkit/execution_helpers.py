@@ -65,12 +65,23 @@ def install_python_package(package_name):
 
 
 def fxsh(endpoint_name="blt_small"):
-    prt = f"fxsh[{endpoint_name}]$ "
-    cmd = input(prt)
+    ps1 = f"fxsh[{endpoint_name}]$ "
+    cwd = "~"
+    cmd = input(ps1)
+
+    # Pseudo-Workdir
     while cmd.lower() != "exit":
-        print(run_console_cmd(cmd, endpoint_name=endpoint_name))
-        cmd = input(prt)
- 
+        try:
+            if cmd.startswith("cd "):
+                cwd = cmd.split("cd ")[1].strip()
+                cmd = input(ps1)
+                continue
+
+            print(run_console_cmd(f"cd {cwd} ; {cmd}", endpoint_name=endpoint_name))
+            cmd = input(ps1)
+        except KeyboardInterrupt:
+            print(ps1 + "exit")
+            break
 
 if __name__ == '__main__':
     fxsh()
