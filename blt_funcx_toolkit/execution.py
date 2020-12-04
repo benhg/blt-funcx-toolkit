@@ -41,7 +41,10 @@ def run_function_wait_result(py_fn,
                 raise e
 
 
-def run_function_async(py_fn, py_fn_args, py_fn_kwargs={}, endpoint_name="blt_small"):
+def run_function_async(py_fn,
+                       py_fn_args,
+                       py_fn_kwargs={},
+                       endpoint_name="blt_small"):
     """
     Asynchronously register and run a Python function on a FuncX endpoint
 
