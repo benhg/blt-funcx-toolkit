@@ -68,3 +68,6 @@ blt_endpoints = {
 
 # Sleep time in sec
 FUNCX_SLEEP_TIME = 5
+
+# Login node FQDN
+BLT_LOGIN_ADDRESS = 'mayo.blt.lclark.edu'

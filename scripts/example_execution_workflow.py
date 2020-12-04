@@ -12,11 +12,11 @@ def blt_transfer_func(mode="u",
                       local_path=None,
                       username=None):
     if mode == "u":
-        upload_file_to_blt(local_path=local_path,
+        ftp_upload_file_to_blt(local_path=local_path,
                            remote_path=remote_path,
                            username=username)
     elif mode == "d":
-        download_file_from_blt(local_path=local_path,
+        ftp_download_file_from_blt(local_path=local_path,
                                remote_path=remote_path,
                                username=username)
 

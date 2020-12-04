@@ -1,16 +1,31 @@
+from config import *
+
 def setup_ftp_conn(username=None, privkey=None):
+    """
+    Open FTP connection to BLT
+
+    Uses the following protocol for authentication:
+
+    1. If no `username` provided, assume BLT username
+        is local username
+    2. If path to private key passed, use private key
+    3. Else, attempt to use default `~/.ssh/id_rsa`
+    4. If that fails, ask user for password.
+
+
+    """
     if not username:
         username = getpass.getuser()
     try:
         if not privkey:
-            conn = pysftp.Connection('mayo.blt.lclark.edu', username=username)
+            conn = pysftp.Connection(BLT_LOGIN_ADDRESS, username=username)
         else:
-            conn = pysftp.Connection('mayo.blt.lclark.edu',
+            conn = pysftp.Connection(BLT_LOGIN_ADDRESS,
                                      username=username,
                                      private_key=privkey)
     except:
         password = getpass.getpass()
-        conn = pysftp.Connection('mayo.blt.lclark.edu',
+        conn = pysftp.Connection(BLT_LOGIN_ADDRESS,
                                  username=username,
                                  password=password)
     return conn
@@ -22,10 +37,18 @@ def check_files(local_path, remote_path, connection):
         sys.exit(1)
 
 
-def upload_file_to_blt(local_path=None,
+def ftp_upload_file_to_blt(local_path=None,
                        remote_path="~",
                        username=None,
                        force=False):
+    """
+    Upload a file or directory to BLT using FTP
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
     print(f"Uploading {local_path} to BLT at location {remote_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
@@ -51,10 +74,18 @@ def upload_file_to_blt(local_path=None,
         conn.put(local_path, remote_path)
 
 
-def download_file_from_blt(local_path=".",
+def ftp_download_file_from_blt(local_path=".",
                            remote_path=None,
                            username=None,
                            force=False):
+    """
+    Download a file or directory from BLT using FTP
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
     print(f"Downloading {remote_path} to BLT at location {local_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
@@ -80,3 +111,87 @@ def download_file_from_blt(local_path=".",
                    f"{os.path.dirname(local_path)}/{remote_basename}")
     else:
         conn.get(remote_path, local_path)
+
+def croc_upload_file_to_blt(local_path=None,
+                       remote_path="~",
+                       username=None,
+                       force=False):
+    """
+    Upload a file or directory to BLT using Croc
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
+    pass
+
+def croc_download_file_from_blt():
+    """
+    Download a file or directory from BLT using Croc
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
+    pass
+
+def upload_file_to_blt(local_path=None,
+                       remote_path="~",
+                       username=None,
+                       force=False):
+    """
+    Upload a file or directory to BLT.
+
+    Use FTP if it is available, otherwise use Croc
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
+    if ftp_is_available():
+        ftp_upload_file_to_blt(local_path=local_path,
+                               remote_path=remote_path,
+                               username=username,
+                               force=force)
+    else:
+        croc_upload_file_to_blt(local_path=local_path,
+                               remote_path=remote_path,
+                               username=username,
+                               force=force)
+
+
+def download_file_from_blt(local_path=None,
+                       remote_path="~",
+                       username=None,
+                       force=False):
+    """
+    Download a file or directory from BLT.
+
+    Use FTP if it is available, otherwise use Croc
+
+    :param local_path: Path where file should be saved
+    :param remote_path: Path where file is currently
+    :param username: Remote host username
+    :param force: Do not ask user to overwrite existing files
+    """
+    if ftp_is_available():
+        ftp_upload_file_to_blt(local_path=local_path,
+                               remote_path=remote_path,
+                               username=username,
+                               force=force)
+    else:
+        croc_upload_file_to_blt(local_path=local_path,
+                               remote_path=remote_path,
+                               username=user)
+
+def ftp_is_available():
+    """
+    Check if FTP transfers from this computer
+        to BLT are possible
+
+    :return Boolean: True if FTP available.
+    """
+    pass
