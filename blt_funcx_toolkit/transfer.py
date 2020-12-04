@@ -1,5 +1,10 @@
-from config import *
+import getpass
+import sys
+import os
 
+import pysftp
+
+from blt_funcx_toolkit.config import *
 
 def setup_ftp_conn(username=None, privkey=None):
     """

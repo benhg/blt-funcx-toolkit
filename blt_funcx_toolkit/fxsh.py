@@ -16,6 +16,7 @@ import argparse
 from blt_funcx_toolkit.execution import fxsh
 from blt_funcx_toolkit.config import blt_endpoints
 
+
 def cli_run():
     parser = argparse.ArgumentParser()
     parser.add_argument("endpoint_name",

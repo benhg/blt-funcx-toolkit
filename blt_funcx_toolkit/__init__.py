@@ -1,6 +1,6 @@
-from execution import *
-from transfer import *
-from config import *
+from blt_funcx_toolkit.execution import *
+from blt_funcx_toolkit.transfer import *
+from blt_funcx_toolkit.config import *
 
 __author__ = "BLT Team"
 

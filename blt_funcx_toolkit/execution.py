@@ -1,9 +1,11 @@
-from funcx.sdk.client import FuncXClient
 import os
+import sys
 import subprocess
 import time
 
-from config import blt_endpoints, FUNCX_SLEEP_TIME
+from funcx.sdk.client import FuncXClient
+
+from blt_funcx_toolkit.config import blt_endpoints, FUNCX_SLEEP_TIME
 
 
 def run_function_wait_result(py_fn,
@@ -133,12 +135,12 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
             print(
                 run_console_cmd(f"cd {cwd} ; {cmd}",
                                 endpoint_name=endpoint_name,
-                                print_wait=print_status))
+                                print_status=print_wait))
             cmd = input(ps1)
     except KeyboardInterrupt:
         # Make ctrl-c look like an `exit`
         print(ps1 + "exit")
-        break
+        sys.exit(0)
 
 
 if __name__ == '__main__':
