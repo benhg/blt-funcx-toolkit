@@ -1,4 +1,12 @@
+"""
+Configuration info for BLT Funcx Toolkit
+"""
+
+
 class BLTEndpoint:
+    """
+    BLT Endpoint wrapper class defining BLT endpoints
+    """
     def __init__(self,
                  name=None,
                  uuid=None,
@@ -10,6 +18,13 @@ class BLTEndpoint:
         self.gpu_count = gpu_count
         self.remarks = remarks
         self.uuid = uuid
+
+    def __repr__(self):
+        return f"""FuncX Endpoint {self.name}: 
+                   {self.core_count} cores,
+                   {self.gpu_count} gpus,
+                   uuid:{self.uuid},
+                   remarks: {self.remarks}"""
 
 
 blt_endpoints = {
@@ -50,3 +65,6 @@ blt_endpoints = {
                 gpu_count=1,
                 remarks="One core and one GPU")
 }
+
+# Sleep time in sec
+SLEEP_TIME = 5

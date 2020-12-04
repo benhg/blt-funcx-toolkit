@@ -3,13 +3,18 @@ import os
 import subprocess
 import time
 
-from config import blt_endpoints
+from config import blt_endpoints, SLEEP_TIME
 
 
 def run_function_wait_result(py_fn,
                              py_fn_args,
                              py_fn_kwargs={},
-                             endpoint_name="blt_small"):
+                             endpoint_name="blt_small",
+                             print_status=True):
+    """
+    Run a function with funcx, wait for execution,
+        and return results when they are available
+    """
     fxc = FuncXClient()
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
@@ -18,8 +23,9 @@ def run_function_wait_result(py_fn,
                   function_id=func_uuid)
     while True:
         try:
-            print("Waiting for results...")
-            time.sleep(5)
+            if print_status:
+                print("Waiting for results...")
+            time.sleep(SLEEP_TIME)
             return str(fxc.get_result(res), encoding="utf-8")
             break
         except Exception as e:
@@ -59,11 +65,12 @@ def install_python_package(package_name):
 
 
 def fxsh(endpoint_name="blt_small"):
-    cmd = input(f"fxsh[{endpoint_name}]$ ")
+    prt = f"fxsh[{endpoint_name}]$ "
+    cmd = input(prt)
     while cmd.lower() != "exit":
         print(run_console_cmd(cmd, endpoint_name=endpoint_name))
-        cmd = input("fxsh$ ")
-
+        cmd = input(prt)
+ 
 
 if __name__ == '__main__':
     fxsh()
