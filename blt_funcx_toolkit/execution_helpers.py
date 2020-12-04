@@ -5,6 +5,7 @@ import time
 
 from config import blt_endpoints
 
+
 def run_function_wait_result(py_fn,
                              py_fn_args,
                              py_fn_kwargs={},
@@ -37,9 +38,11 @@ def run_function_async(py_fn, py_fn_args, endpoint_name="blt_small"):
                   function_id=func_uuid)
     return res
 
+
 def funcx_command_fn(cmd):
-        import subprocess
-        return subprocess.check_output(cmd, shell=True)
+    import subprocess
+    return subprocess.check_output(cmd, shell=True)
+
 
 def run_console_cmd(command, endpoint_name="blt_small", wait=True):
     if wait:
@@ -60,6 +63,7 @@ def fxsh(endpoint_name="blt_small"):
     while cmd.lower() != "exit":
         print(run_console_cmd(cmd, endpoint_name=endpoint_name))
         cmd = input("fxsh$ ")
+
 
 if __name__ == '__main__':
     fxsh()
