@@ -1,5 +1,6 @@
 from config import *
 
+
 def setup_ftp_conn(username=None, privkey=None):
     """
     Open FTP connection to BLT
@@ -38,9 +39,9 @@ def check_files(local_path, remote_path, connection):
 
 
 def ftp_upload_file_to_blt(local_path=None,
-                       remote_path="~",
-                       username=None,
-                       force=False):
+                           remote_path="~",
+                           username=None,
+                           force=False):
     """
     Upload a file or directory to BLT using FTP
 
@@ -75,9 +76,9 @@ def ftp_upload_file_to_blt(local_path=None,
 
 
 def ftp_download_file_from_blt(local_path=".",
-                           remote_path=None,
-                           username=None,
-                           force=False):
+                               remote_path=None,
+                               username=None,
+                               force=False):
     """
     Download a file or directory from BLT using FTP
 
@@ -112,10 +113,11 @@ def ftp_download_file_from_blt(local_path=".",
     else:
         conn.get(remote_path, local_path)
 
+
 def croc_upload_file_to_blt(local_path=None,
-                       remote_path="~",
-                       username=None,
-                       force=False):
+                            remote_path="~",
+                            username=None,
+                            force=False):
     """
     Upload a file or directory to BLT using Croc
 
@@ -125,6 +127,7 @@ def croc_upload_file_to_blt(local_path=None,
     :param force: Do not ask user to overwrite existing files
     """
     pass
+
 
 def croc_download_file_from_blt():
     """
@@ -136,6 +139,7 @@ def croc_download_file_from_blt():
     :param force: Do not ask user to overwrite existing files
     """
     pass
+
 
 def upload_file_to_blt(local_path=None,
                        remote_path="~",
@@ -158,15 +162,15 @@ def upload_file_to_blt(local_path=None,
                                force=force)
     else:
         croc_upload_file_to_blt(local_path=local_path,
-                               remote_path=remote_path,
-                               username=username,
-                               force=force)
+                                remote_path=remote_path,
+                                username=username,
+                                force=force)
 
 
 def download_file_from_blt(local_path=None,
-                       remote_path="~",
-                       username=None,
-                       force=False):
+                           remote_path="~",
+                           username=None,
+                           force=False):
     """
     Download a file or directory from BLT.
 
@@ -184,8 +188,9 @@ def download_file_from_blt(local_path=None,
                                force=force)
     else:
         croc_upload_file_to_blt(local_path=local_path,
-                               remote_path=remote_path,
-                               username=user)
+                                remote_path=remote_path,
+                                username=user)
+
 
 def ftp_is_available():
     """
