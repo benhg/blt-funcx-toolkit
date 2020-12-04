@@ -50,3 +50,10 @@ def run_console_cmd(command, endpoint_name="blt_small", wait=True):
 def install_python_package(package_name):
     return run_console_cmd(
         f"sudo /local/cluster/bin/pip3 install {package_name}")
+
+
+def fxsh(endpoint_name="blt_small"):
+    cmd = input("fxsh$ ")
+    while cmd.lower() != "exit":
+        print(run_console_cmd(cmd, enndpoint_name=endpoint_name))
+        cmd = input("fxsh$ ")
