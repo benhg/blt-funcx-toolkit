@@ -1,10 +1,15 @@
-from config import blt_endpoints
+from funcx.sdk.client import FuncXClient
+import os
+import subprocess
+import time
 
+from config import blt_endpoints
 
 def run_function_wait_result(py_fn,
                              py_fn_args,
                              py_fn_kwargs={},
                              endpoint_name="blt_small"):
+    fxc = FuncXClient()
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
                   **py_fn_kwargs,
@@ -14,12 +19,10 @@ def run_function_wait_result(py_fn,
         try:
             print("Waiting for results...")
             time.sleep(5)
-            return fxc.get_result(res)
+            return str(fxc.get_result(res), encoding="utf-8")
             break
         except Exception as e:
-            if "waiting-for-ep" in str(e):
-                continue
-            elif "waiting-for-nodes" in str(e):
+            if "waiting-for-" in str(e):
                 continue
             else:
                 raise e
@@ -27,23 +30,23 @@ def run_function_wait_result(py_fn,
 
 def run_function_async(py_fn, py_fn_args, endpoint_name="blt_small"):
     # Use return value for Funcx polling
+    fxc = FuncXClient()
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
                   endpoint_id=blt_endpoints[endpoint_name].uuid,
                   function_id=func_uuid)
     return res
 
-
-def run_console_cmd(command, endpoint_name="blt_small", wait=True):
-    def funcx_command_fn(cmd):
+def funcx_command_fn(cmd):
         import subprocess
         return subprocess.check_output(cmd, shell=True)
 
+def run_console_cmd(command, endpoint_name="blt_small", wait=True):
     if wait:
-        return run_function_wait_result(funcx_command_fn, [cmd],
+        return run_function_wait_result(funcx_command_fn, [command],
                                         endpoint_name=endpoint_name)
     else:
-        return run_function_async(funcx_command_fn, [cmd],
+        return run_function_async(funcx_command_fn, [command],
                                   endpoint_name=endpoint_name)
 
 
@@ -53,7 +56,10 @@ def install_python_package(package_name):
 
 
 def fxsh(endpoint_name="blt_small"):
-    cmd = input("fxsh$ ")
+    cmd = input(f"fxsh[{endpoint_name}]$ ")
     while cmd.lower() != "exit":
-        print(run_console_cmd(cmd, enndpoint_name=endpoint_name))
+        print(run_console_cmd(cmd, endpoint_name=endpoint_name))
         cmd = input("fxsh$ ")
+
+if __name__ == '__main__':
+    fxsh()

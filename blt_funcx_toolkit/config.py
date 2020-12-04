@@ -9,6 +9,7 @@ class BLTEndpoint:
         self.core_count = core_count
         self.gpu_count = gpu_count
         self.remarks = remarks
+        self.uuid = uuid
 
 
 blt_endpoints = {
@@ -21,7 +22,7 @@ blt_endpoints = {
     "blt_medium":
     BLTEndpoint(name="blt_medium",
                 uuid="a145aa44-abfa-4ff8-8131-2097dcdb90e9",
-                cpu_count=4,
+                core_count=4,
                 gpu_count=0,
                 remarks="4 Cores"),
     "blt_large":
