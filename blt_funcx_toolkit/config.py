@@ -67,4 +67,4 @@ blt_endpoints = {
 }
 
 # Sleep time in sec
-SLEEP_TIME = 5
+FUNCX_SLEEP_TIME = 5

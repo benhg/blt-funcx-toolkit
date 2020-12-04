@@ -3,7 +3,7 @@ import os
 import subprocess
 import time
 
-from config import blt_endpoints, SLEEP_TIME
+from config import blt_endpoints, FUNCX_SLEEP_TIME
 
 
 def run_function_wait_result(py_fn,
@@ -31,7 +31,7 @@ def run_function_wait_result(py_fn,
         try:
             if print_status:
                 print("Waiting for results...")
-            time.sleep(SLEEP_TIME)
+            time.sleep(FUNCX_SLEEP_TIME)
             return str(fxc.get_result(res), encoding="utf-8")
             break
         except Exception as e:
