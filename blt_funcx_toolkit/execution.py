@@ -43,6 +43,7 @@ def run_function_wait_result(py_fn,
                 raise e
 
 
+
 def run_function_async(py_fn,
                        py_fn_args,
                        py_fn_kwargs={},
@@ -135,12 +136,15 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
                 cwd = cmd.split("cd ")[1].strip()
                 cmd = input(ps1)
                 continue
-
-            print(
-                run_console_cmd(f"cd {cwd} ; {cmd}",
-                                endpoint_name=endpoint_name,
-                                wait=True,
-                                print_status=print_wait))
+            try:
+                print(
+                    run_console_cmd(f"cd {cwd} ; {cmd}",
+                                    endpoint_name=endpoint_name,
+                                    wait=True,
+                                    print_status=print_wait))
+            except subprocess.CalledProcessError as e:
+                print(f"Command {cmd} Failed:")
+                print(str(e))
             cmd = input(ps1)
     except KeyboardInterrupt:
         # Make ctrl-c look like an `exit`

@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_namespace_packages
+from setuptools import setup, find_packages
 
 version_ns = {}
 with open(os.path.join("blt_funcx_toolkit", "version.py")) as f:
@@ -12,7 +12,7 @@ with open('requirements.txt') as f:
 setup(
     name='blt_funcx_toolkit',
     version=version,
-    packages=find_namespace_packages(include=['blt_funcx_toolkit.*']),
+    packages=find_packages(),
     description='BLT FuncX Toolkit: For easily accessing FuncX endpoints',
     install_requires=install_requires,
     python_requires=">=3.6.0",
