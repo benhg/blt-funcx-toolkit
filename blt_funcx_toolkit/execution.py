@@ -43,7 +43,6 @@ def run_function_wait_result(py_fn,
                 raise e
 
 
-
 def run_function_async(py_fn,
                        py_fn_args,
                        py_fn_kwargs={},
