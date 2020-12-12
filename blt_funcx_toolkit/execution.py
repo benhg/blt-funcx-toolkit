@@ -74,7 +74,7 @@ def _funcx_command_fn(cmd):
     return subprocess.check_output(cmd, shell=True)
 
 
-def run_console_cmd(command, endpoint_name="blt_small", wait=True):
+def run_console_cmd(command, endpoint_name="blt_small", wait=True, print_status=True):
     """
     Run a console command on the FuncX endpoint specified.
 
@@ -88,7 +88,8 @@ def run_console_cmd(command, endpoint_name="blt_small", wait=True):
     """
     if wait:
         return run_function_wait_result(_funcx_command_fn, [command],
-                                        endpoint_name=endpoint_name)
+                                        endpoint_name=endpoint_name,
+                                        print_status=print_status)
     else:
         return run_function_async(_funcx_command_fn, [command],
                                   endpoint_name=endpoint_name)
@@ -135,6 +136,7 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
             print(
                 run_console_cmd(f"cd {cwd} ; {cmd}",
                                 endpoint_name=endpoint_name,
+                                wait=True,
                                 print_status=print_wait))
             cmd = input(ps1)
     except KeyboardInterrupt:

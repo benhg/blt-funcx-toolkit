@@ -10,7 +10,7 @@ with open('requirements.txt') as f:
     install_requires = f.readlines()
 
 setup(
-    name='blt-funcx-toolkit',
+    name='blt_funcx_toolkit',
     version=version,
     packages=find_namespace_packages(include=['blt_funcx_toolkit.*']),
     description='BLT FuncX Toolkit: For easily accessing FuncX endpoints',
