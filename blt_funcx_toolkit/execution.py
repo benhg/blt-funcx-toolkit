@@ -74,7 +74,10 @@ def _funcx_command_fn(cmd):
     return subprocess.check_output(cmd, shell=True)
 
 
-def run_console_cmd(command, endpoint_name="blt_small", wait=True, print_status=True):
+def run_console_cmd(command,
+                    endpoint_name="blt_small",
+                    wait=True,
+                    print_status=True):
     """
     Run a console command on the FuncX endpoint specified.
 
