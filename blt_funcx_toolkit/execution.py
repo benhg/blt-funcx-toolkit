@@ -125,8 +125,9 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
     :param endpoint_name: Endpoint name. Must be present in config file
     :param print_wait: Print "waiting for results.." periodically while waiting.
     """
+    username = input("login: ")
     ps1 = f"fxsh[{endpoint_name}]$ "
-    cwd = "~"
+    cwd = "~" + username
     try:
         cmd = input(ps1)
         while cmd.lower() != "exit":
