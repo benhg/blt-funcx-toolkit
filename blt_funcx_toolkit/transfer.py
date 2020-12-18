@@ -161,7 +161,7 @@ def upload_file_to_blt(local_path=None,
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    if ftp_is_available():
+    if ftp_is_available(username=username):
         ftp_upload_file_to_blt(local_path=local_path,
                                remote_path=remote_path,
                                username=username,
@@ -187,7 +187,7 @@ def download_file_from_blt(local_path=None,
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    if ftp_is_available():
+    if ftp_is_available(username=username):
         ftp_upload_file_to_blt(local_path=local_path,
                                remote_path=remote_path,
                                username=username,
@@ -198,11 +198,16 @@ def download_file_from_blt(local_path=None,
                                 username=user)
 
 
-def ftp_is_available():
+def ftp_is_available(username=None):
     """
     Check if FTP transfers from this computer
         to BLT are possible
 
     :return Boolean: True if FTP available.
     """
-    pass
+    try:
+        setup_ftp_conn(username=username, privkey=None)
+        return True
+    except:
+        return False
+
