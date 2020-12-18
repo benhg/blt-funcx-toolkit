@@ -210,4 +210,3 @@ def ftp_is_available(username=None):
         return True
     except:
         return False
-
