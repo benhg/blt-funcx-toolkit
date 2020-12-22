@@ -131,6 +131,10 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
     try:
         cmd = input(ps1)
         while cmd.lower() != "exit":
+            # Handle ctrl-D
+            if cmd == "":
+                print(ps1 + "exit")
+                sys.exit(0)
 
             if cmd.startswith("cd "):
                 cwd = cmd.split("cd ")[1].strip()
