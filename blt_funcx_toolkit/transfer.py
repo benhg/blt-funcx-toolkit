@@ -123,9 +123,7 @@ def ftp_download_file_from_blt(local_path=".",
         conn.get(remote_path, local_path)
 
 
-def croc_upload_file_to_blt(local_path=None,
-                            remote_path="~",
-                            force=False):
+def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
     """
     Upload a file or directory to BLT using Croc
 
@@ -138,15 +136,14 @@ def croc_upload_file_to_blt(local_path=None,
     :param force: Do not ask user to overwrite existing files
     """
     passphrase = f"blt-upload-{random.randint(0, 100000)}"
-    output = subprocess.Popen(["croc", "send", "--code", passphrase, local_path])
+    output = subprocess.Popen(
+        ["croc", "send", "--code", passphrase, local_path])
     print(passphrase)
     run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
     print(f"{local_path} has been uploaded to {remote_path} on BLT")
 
 
-def croc_download_file_from_blt(local_path=None, 
-                                remote_path="~", 
-                                force=False):
+def croc_download_file_from_blt(local_path=None, remote_path="~", force=False):
     """
     Download a file or directory from BLT using Croc
 
@@ -161,7 +158,7 @@ def croc_download_file_from_blt(local_path=None,
     if not local_path == None:
         os.system(f"cd {local_path}")
     #else:
-        #local_path = input("What is the path you wish to upload the file to?")
+    #local_path = input("What is the path you wish to upload the file to?")
     os.system(f"croc --yes {passphrase}")
     print(f"{remote_path} on BLT has been downloaded to {local_path}")
 
