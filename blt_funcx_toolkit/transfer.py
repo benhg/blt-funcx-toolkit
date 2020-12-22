@@ -137,7 +137,7 @@ def croc_upload_file_to_blt(local_path=None,
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    passphrase = f"blt-{random.randint(0, 100000)}"
+    passphrase = f"blt-upload-{random.randint(0, 100000)}"
     output = subprocess.Popen(["croc", "send", "--code", passphrase, local_path])
     print(passphrase)
     run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
