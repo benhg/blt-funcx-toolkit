@@ -1,10 +1,13 @@
 import getpass
 import sys
 import os
+import subprocess
+import random
 
 import pysftp
 
 from blt_funcx_toolkit.config import *
+from blt_funcx_toolkit.execution import run_console_cmd
 
 
 def setup_ftp_conn(username=None, privkey=None):
@@ -122,20 +125,28 @@ def ftp_download_file_from_blt(local_path=".",
 
 def croc_upload_file_to_blt(local_path=None,
                             remote_path="~",
-                            username=None,
                             force=False):
     """
     Upload a file or directory to BLT using Croc
 
-    :param local_path: Path where file should be saved
-    :param remote_path: Path where file is currently
+    :param local_path: Path where file is currently
+    :param remote_path: Path where file should be saved
+                Must be an absolute path
+                If a file is provided with a remote directly, we will
+                place that file in the directory with the same name
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    pass
+    passphrase = f"blt-{random.randint(0, 100000)}"
+    output = subprocess.Popen(["croc", "send", "--code", passphrase, local_path])
+    print(passphrase)
+    run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
+    print(f"{local_path} has been uploaded to {remote_path} on BLT")
 
 
-def croc_download_file_from_blt():
+def croc_download_file_from_blt(local_path=None, 
+                                remote_path="~", 
+                                force=False):
     """
     Download a file or directory from BLT using Croc
 
@@ -144,7 +155,15 @@ def croc_download_file_from_blt():
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    pass
+    #remote_path = input("What is the path to the file you wish to upload?")
+    output = run_console_cmd(f"croc send {remote_path}")
+    passphrase = output.split("croc ", 1)
+    if not local_path == None:
+        os.system(f"cd {local_path}")
+    #else:
+        #local_path = input("What is the path you wish to upload the file to?")
+    os.system(f"croc --yes {passphrase}")
+    print(f"{remote_path} on BLT has been downloaded to {local_path}")
 
 
 def upload_file_to_blt(local_path=None,
@@ -169,7 +188,6 @@ def upload_file_to_blt(local_path=None,
     else:
         croc_upload_file_to_blt(local_path=local_path,
                                 remote_path=remote_path,
-                                username=username,
                                 force=force)
 
 
@@ -195,7 +213,7 @@ def download_file_from_blt(local_path=None,
     else:
         croc_upload_file_to_blt(local_path=local_path,
                                 remote_path=remote_path,
-                                username=user)
+                                force=force)
 
 
 def ftp_is_available():
