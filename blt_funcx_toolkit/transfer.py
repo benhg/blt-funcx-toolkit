@@ -130,15 +130,22 @@ def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
     :param local_path: Path where file is currently
     :param remote_path: Path where file should be saved
                 Must be an absolute path
-                If a file is provided with a remote directly, we will
+                Must be a directory name
+                If a file is provided with a remote directory, we will
                 place that file in the directory with the same name
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
+    basename = os.path.basename(local_path)
+    remote_path_exists = True if run_console_cmd(f'[ -e "{remote_path}" ] && echo 1 || echo 0') == "1" else False
+    if remote_path_exists and not force:
+        res = input(f"WARN: Remote File {remote_path} Exists. Continue? y/N: ")
+        if res.lower() != "y":
+            print("Aborting.")
+            sys.exit(1)
     passphrase = f"blt-upload-{random.randint(0, 100000)}"
     output = subprocess.Popen(
         ["croc", "send", "--code", passphrase, local_path])
-    print(passphrase)
     run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
     print(f"{local_path} has been uploaded to {remote_path} on BLT")
 
