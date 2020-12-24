@@ -137,7 +137,8 @@ def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
     :param force: Do not ask user to overwrite existing files
     """
     basename = os.path.basename(local_path)
-    remote_path_exists = True if run_console_cmd(f'[ -e "{remote_path}" ] && echo 1 || echo 0') == "1" else False
+    remote_path_exists = True if run_console_cmd(
+        f'[ -e "{remote_path}" ] && echo 1 || echo 0') == "1" else False
     if remote_path_exists and not force:
         res = input(f"WARN: Remote File {remote_path} Exists. Continue? y/N: ")
         if res.lower() != "y":
