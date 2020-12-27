@@ -2,6 +2,7 @@ import getpass
 import sys
 import os
 import subprocess
+import platform
 import random
 
 import pysftp
@@ -225,8 +226,20 @@ def ftp_is_available(username=None):
 
     :return Boolean: True if FTP available.
     """
-    try:
-        setup_ftp_conn(username=username, privkey=None)
-        return True
-    except:
-        return False
+    return True if ping("mayo.blt.lclark.edu") else False
+
+
+def ping(host):
+    """
+    Returns True if host (str) responds to a ping request.
+    Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
+    """
+
+    # Option for the number of packets as a function of
+    param = '-n' if platform.system().lower()=='windows' else '-c'
+
+    # Building the command. Ex: "ping -c 1 google.com"
+    command = ['ping', param, '1', host]
+
+    return subprocess.call(command, stdout=subprocess.DEVNULL, 
+                           stderr=subprocess.DEVNULL) == 0
