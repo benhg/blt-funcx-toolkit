@@ -32,7 +32,8 @@ setup(
         "BLT"
     ],
     entry_points={'console_scripts':
-                  ['fxsh=blt_funcx_toolkit.fxsh:cli_run']
+                  ['fxsh=blt_funcx_toolkit.fxsh:cli_run',
+                   'blt_transfer=blt_funcx_toolkit.blt_transfer:cli_run']
     },
     author='Ben Glick',
     author_email='glick@glick.cloud',
