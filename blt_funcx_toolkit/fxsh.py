@@ -38,7 +38,6 @@ def cli_run():
     if args.version:
         print(f"blt-funcx-toolkit version: {VERSION}")
 
-
     fxsh(endpoint_name=args.endpoint_name, print_wait=args.verbose)
 
 
