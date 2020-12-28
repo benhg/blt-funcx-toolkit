@@ -154,4 +154,3 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
         # Make ctrl-c look like an `exit`
         print(ps1 + "exit")
         sys.exit(0)
-
