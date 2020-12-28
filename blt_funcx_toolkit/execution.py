@@ -155,6 +155,3 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
         print(ps1 + "exit")
         sys.exit(0)
 
-
-if __name__ == '__main__':
-    fxsh()
