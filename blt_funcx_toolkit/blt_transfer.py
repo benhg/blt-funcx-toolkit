@@ -1,4 +1,7 @@
 import argparse
+import sys
+
+from blt_funcx_toolkit.version import VERSION
 from blt_funcx_toolkit.transfer import upload_file_to_blt, download_file_from_blt
 
 
@@ -36,7 +39,15 @@ def cli_run():
                         type=str,
                         default=None,
                         help="Specify private key location. Optional")
+    parser.add_argument("--version",
+                        action="store_true",
+                        help="Print version number and exit",
+                        default=False)
     args = parser.parse_args()
+
+    if args.version:
+        print(f"blt-funcx-toolkit version: {VERSION}")
+        sys.exit(0)
 
     if args.upload and args.download:
         print("ERROR: Cannot upload and download together.")

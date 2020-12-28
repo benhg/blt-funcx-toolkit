@@ -14,6 +14,7 @@ import argparse
 
 from blt_funcx_toolkit.execution import fxsh
 from blt_funcx_toolkit.config import blt_endpoints
+from blt_funcx_toolkit.version import VERSION
 
 
 def cli_run():
@@ -29,8 +30,14 @@ def cli_run():
                         action="store_true",
                         help="Enable verbose output",
                         default=False)
+    parser.add_argument("--version",
+                        action="store_true",
+                        help="Print version number and exit",
+                        default=False)
     args = parser.parse_args()
-    args = parser.parse_args()
+    if args.version:
+        print(f"blt-funcx-toolkit version: {VERSION}")
+
 
     fxsh(endpoint_name=args.endpoint_name, print_wait=args.verbose)
 
