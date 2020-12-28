@@ -148,8 +148,8 @@ def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
     passphrase = f"blt-upload-{random.randint(0, 100000)}"
     output = subprocess.Popen(
         ["croc", "send", "--code", passphrase, local_path],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL)
     run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
     print(f"{local_path} has been uploaded to {remote_path} on BLT")
 
@@ -166,8 +166,8 @@ def croc_download_file_from_blt(local_path=None, remote_path="~", force=False):
     passphrase = f"blt-{random.randint(0, 100000)}"
     run_console_cmd(f"croc send --code {passphrase} {remote_path}")
     subprocess.Popen(["croc", "--yes", passphrase, "--out", local_path],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
+                     stdout=subprocess.DEVNULL,
+                     stderr=subprocess.DEVNULL)
     print(
         f"{remote_path} on BLT has been downloaded to {local_path} on your machine"
     )
