@@ -38,7 +38,7 @@ def cli_run():
                         default=False)
     args = parser.parse_args()
     if args.version:
-        print(f"blt-funcx-toolkit version: {VERSION}")
+        logger.info(f"blt-funcx-toolkit version: {VERSION}")
         sys.exit(0)
 
     fxsh(endpoint_name=args.endpoint_name, print_wait=args.verbose)
