@@ -37,7 +37,8 @@ def run_function_wait_result(py_fn,
                 logging.info("Waiting for results...")
             time.sleep(FUNCX_SLEEP_TIME)
             retsult_str = str(fxc.get_result(res), encoding="utf-8")
-            logging.debug(f"Got result from function {py_fn} on endpoint {ep_name}")
+            logging.debug(
+                f"Got result from function {py_fn} on endpoint {ep_name}")
             return result_str
         except Exception as e:
             if "waiting-for-" in str(e):

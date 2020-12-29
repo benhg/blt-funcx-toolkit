@@ -13,7 +13,9 @@ __all__ = [
 ]
 
 
-def set_stream_logger(name: str = 'blt_funcx_toolkit', level: int = logging.DEBUG, format_string: Optional[str] = None):
+def set_stream_logger(name: str = 'blt_funcx_toolkit',
+                      level: int = logging.DEBUG,
+                      format_string: Optional[str] = None):
     """Add a stream log handler.
     Args:
          - name (string) : Set the logger name.
@@ -32,6 +34,7 @@ def set_stream_logger(name: str = 'blt_funcx_toolkit', level: int = logging.DEBU
     formatter = logging.Formatter(format_string, datefmt='%Y-%m-%d %H:%M:%S')
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
 
 # Unless we can think of a reason why not, set log level to DEBUG
 set_stream_logger()
