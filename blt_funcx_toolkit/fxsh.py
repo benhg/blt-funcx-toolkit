@@ -12,6 +12,7 @@ Has only been tested with Linux-based endponits
 
 import argparse
 import sys
+import logging
 
 from blt_funcx_toolkit.execution import fxsh
 from blt_funcx_toolkit.config import blt_endpoints

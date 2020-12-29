@@ -1,5 +1,6 @@
 import argparse
 import sys
+import logging
 
 from blt_funcx_toolkit.version import VERSION
 from blt_funcx_toolkit.transfer import upload_file_to_blt, download_file_from_blt
@@ -46,11 +47,11 @@ def cli_run():
     args = parser.parse_args()
 
     if args.version:
-        print(f"blt-funcx-toolkit version: {VERSION}")
+        logging.info(f"blt-funcx-toolkit version: {VERSION}")
         sys.exit(0)
 
     if args.upload and args.download:
-        print("ERROR: Cannot upload and download together.")
+        logging.error("Cannot upload and download together.")
         sys.exit(1)
 
     if args.upload:
@@ -62,7 +63,7 @@ def cli_run():
                                remote_path=args.remote_path,
                                username=args.username)
     else:
-        print("WARN: No action specified. Exiting.")
+        logging.warning("No action specified. Exiting.")
 
 
 if __name__ == '__main__':

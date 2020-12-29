@@ -4,6 +4,7 @@ import os
 import subprocess
 import platform
 import random
+import logging
 
 import pysftp
 
@@ -27,6 +28,7 @@ def setup_ftp_conn(username=None, privkey=None):
     """
     if not username:
         username = getpass.getuser()
+    logging.debug(f"Logging into BLT with user {username}")
     try:
         if not privkey:
             conn = pysftp.Connection(BLT_LOGIN_ADDRESS, username=username)
@@ -35,6 +37,7 @@ def setup_ftp_conn(username=None, privkey=None):
                                      username=username,
                                      private_key=privkey)
     except:
+        logging.debug(f"Could use key for user {username}. Using password.")
         password = getpass.getpass()
         conn = pysftp.Connection(BLT_LOGIN_ADDRESS,
                                  username=username,
@@ -44,7 +47,7 @@ def setup_ftp_conn(username=None, privkey=None):
 
 def check_files(local_path, remote_path, connection):
     if not local_path or not remote_path:
-        print("ERROR: Local Path and Remote Path are Required.")
+        logger.error("Local Path and Remote Path are Required.")
         sys.exit(1)
 
 
@@ -60,18 +63,18 @@ def ftp_upload_file_to_blt(local_path=None,
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    print(f"Uploading {local_path} to BLT at location {remote_path}")
+    logger.info(f"Uploading {local_path} to BLT at location {remote_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
     local_path = os.path.abspath(local_path)
 
     if not (os.path.isfile(local_path) or os.path.isdir(local_path)):
-        print(f"ERROR: Local Path {local_path} Does not Exist")
+        logger.error(f"Local Path {local_path} Does not Exist")
         sys.exit(1)
     if conn.exists(remote_path) and not force:
         res = input(f"WARN: Remote File {remote_path} Exists. Continue? y/N: ")
         if res.lower() != "y":
-            print("Aborting.")
+            logger.error("Aborting.")
             sys.exit(1)
 
     remote_dir = os.path.dirname(remote_path)
@@ -97,18 +100,18 @@ def ftp_download_file_from_blt(local_path=".",
     :param username: Remote host username
     :param force: Do not ask user to overwrite existing files
     """
-    print(f"Downloading {remote_path} to BLT at location {local_path}")
+    logger.info(f"Downloading {remote_path} to BLT at location {local_path}")
     conn = setup_ftp_conn(username)
     check_files(local_path, remote_path, conn)
     local_path = os.path.abspath(local_path)
 
     if not conn.exists(remote_path):
-        print(f"ERROR: Remote Path {remote_path} Does not Exist")
+        logger.error(f"Remote Path {remote_path} Does not Exist")
         sys.exit(1)
     if (os.path.isfile(local_path) or os.path.isdir(local_path)) and not force:
         res = input(f"WARN: Local File {local_path} Exists. Continue? y/N: ")
         if res.lower() != "y":
-            print("Aborting.")
+            logger.error("Aborting.")
             sys.exit(1)
         os.remove(local_path)
 
@@ -143,7 +146,7 @@ def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
     if remote_path_exists and not force:
         res = input(f"WARN: Remote File {remote_path} Exists. Continue? y/N: ")
         if res.lower() != "y":
-            print("Aborting.")
+            logger.error("Aborting.")
             sys.exit(1)
     passphrase = f"blt-upload-{random.randint(0, 100000)}"
     output = subprocess.Popen(
@@ -151,7 +154,7 @@ def croc_upload_file_to_blt(local_path=None, remote_path="~", force=False):
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL)
     run_console_cmd(f"croc --yes {passphrase} --out {remote_path}")
-    print(f"{local_path} has been uploaded to {remote_path} on BLT")
+    logger.info(f"{local_path} has been uploaded to {remote_path} on BLT")
 
 
 def croc_download_file_from_blt(local_path=None, remote_path="~", force=False):
@@ -168,7 +171,7 @@ def croc_download_file_from_blt(local_path=None, remote_path="~", force=False):
     subprocess.Popen(["croc", "--yes", passphrase, "--out", local_path],
                      stdout=subprocess.DEVNULL,
                      stderr=subprocess.DEVNULL)
-    print(
+    logger.info(
         f"{remote_path} on BLT has been downloaded to {local_path} on your machine"
     )
 
@@ -230,6 +233,7 @@ def ftp_is_available(username=None):
 
     :return Boolean: True if FTP available.
     """
+    logger.debug(f"Checking for FTP connection to BLT")
     return True if ping("mayo.blt.lclark.edu") else False
 
 
@@ -238,7 +242,7 @@ def ping(host):
     Returns True if host (str) responds to a ping request.
     Remember that a host may not respond to a ping (ICMP) request even if the host name is valid.
     """
-
+    logger.debug(f"Pinging {host}")
     # Option for the number of packets as a function of
     param = '-n' if platform.system().lower() == 'windows' else '-c'
 

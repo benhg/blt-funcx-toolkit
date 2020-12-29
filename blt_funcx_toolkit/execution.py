@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import time
+import logging
 
 from funcx.sdk.client import FuncXClient
 
@@ -24,6 +25,7 @@ def run_function_wait_result(py_fn,
         - must be configured in config.py
     """
     fxc = FuncXClient()
+    logging.debug(f"Registering Function {py_fn} with endpoint {ep_name}")
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
                   **py_fn_kwargs,
@@ -32,10 +34,11 @@ def run_function_wait_result(py_fn,
     while True:
         try:
             if print_status:
-                print("Waiting for results...")
+                logging.info("Waiting for results...")
             time.sleep(FUNCX_SLEEP_TIME)
-            return str(fxc.get_result(res), encoding="utf-8")
-            break
+            retsult_str = str(fxc.get_result(res), encoding="utf-8")
+            logging.debug(f"Got result from function {py_fn} on endpoint {ep_name}")
+            return result_str
         except Exception as e:
             if "waiting-for-" in str(e):
                 continue
@@ -58,6 +61,7 @@ def run_function_async(py_fn,
     """
     # Use return value for Funcx polling
     fxc = FuncXClient()
+    logging.debug(f"Registering Function {py_fn} with endpoint {ep_name}")
     func_uuid = fxc.register_function(py_fn)
     res = fxc.run(*py_fn_args,
                   **kwargs,
@@ -89,6 +93,7 @@ def run_console_cmd(command,
         - must be configured in config.py
     :param wait: Wait for output if True, otherwise run async.
     """
+    logging.debug(f"Running Command {command} on endpoint {endpoint_name}")
     if wait:
         return run_function_wait_result(_funcx_command_fn, [command],
                                         endpoint_name=endpoint_name,
@@ -106,6 +111,7 @@ def install_python_package(package_name):
 
     :param package_name: Package to install.
     """
+    logging.debug(f"Installing package {package_name}")
     return run_console_cmd(
         f"sudo /local/cluster/bin/pip3 install {package_name}")
 
@@ -131,7 +137,7 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
     try:
         cmd = input(ps1)
         while cmd.lower() != "exit":
-            # Handle ctrl-D
+            # Handle ctrl-D / EOF / Empty str
             if cmd == "":
                 print(ps1 + "exit")
                 sys.exit(0)
@@ -147,8 +153,8 @@ def fxsh(endpoint_name="blt_small", print_wait=True):
                                     wait=True,
                                     print_status=print_wait))
             except subprocess.CalledProcessError as e:
-                print(f"Command {cmd} Failed:")
-                print(str(e))
+                logging.error(f"Command {cmd} Failed:")
+                logging.error(str(e))
             cmd = input(ps1)
     except KeyboardInterrupt:
         # Make ctrl-c look like an `exit`
