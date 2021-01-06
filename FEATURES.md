@@ -38,7 +38,7 @@ Plus two backends for those functions:
 - Dev docs in docstrings for functions
 - Examples in `scripts` directory
 
-## 0.12.0
+## 0.2.0
 
 ### Functions
 
